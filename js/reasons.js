@@ -30,50 +30,94 @@ document.addEventListener('keydown', (e) => {
 });
 
 /* ================================================================
-   AUTO-SCROLL PELAN buat kontainer "100 reasons"
+   AUTO-SCROLL PELAN buat kontainer "100 reasons" (.reasons-list)
    -----------------------------------------------------------
-   Kontainernya otomatis scroll ke bawah pelan-pelan (kayak
-   credits film), biar ada animasi kecil & dia nggak perlu
-   scroll manual buat baca semuanya. Begitu dia coba interaksi
-   sendiri (hover, sentuh, atau scroll manual), auto-scroll-nya
-   berhenti sebentar, lalu lanjut lagi otomatis kalau didiemin.
+   // Slow, continuous auto-scroll (like movie credits).
 
-   EDIT DI SINI kalau mau ubah kecepatannya: makin besar angka
-   di `scrollSpeed`, makin cepat scroll-nya (default: pelan banget).
+   KENAPA DIPERBAIKI / WHY THE FIX:
+   Browser sering membulatkan `scrollTop` ke angka bulat, jadi
+   `scrollTop += 0.35` bisa dianggap +0 dan scroll-nya "diam".
+   Sekarang posisi disimpan sendiri di variabel desimal (`pos`),
+   lalu baru diterapkan ke scrollTop. Kecepatan juga pakai waktu
+   (px per detik), jadi sama di layar 60Hz maupun 120Hz.
+   // Keep a float position in JS, apply it to scrollTop; speed is
+   // time-based so it is identical on 60Hz and 120Hz screens.
+
+   EDIT DI SINI kalau mau ubah kecepatan / pengaturan lain.
 ================================================================= */
 const reasonsBox = document.getElementById('reasonsBox');
 
 if (reasonsBox){
-  const scrollSpeed = 0.35; // px per frame — kecil = pelan
-  let isPaused = false;
-  let resumeTimeout = null;
-  let loopScheduled = false;
+  // <!-- GANTI DI SINI --> kecepatan scroll (px per detik). Kecil = pelan.
+  const SCROLL_SPEED_PX_PER_SEC = 22;
+  // <!-- GANTI DI SINI --> jeda (ms) saat sampai bawah sebelum balik ke atas
+  const END_PAUSE_MS = 2000;
+  // <!-- GANTI DI SINI --> jeda (ms) sebelum lanjut scroll setelah user interaksi
+  const RESUME_DELAY_MS = 2500;
 
-  function pauseAutoScroll(){
-    isPaused = true;
-    clearTimeout(resumeTimeout);
-    resumeTimeout = setTimeout(() => { isPaused = false; }, 1800);
-  }
+  // Hormati pengaturan "reduce motion" dari perangkat
+  // // Respect the user's reduced-motion setting
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  ['mouseenter', 'touchstart', 'wheel'].forEach(evt => {
-    reasonsBox.addEventListener(evt, pauseAutoScroll, { passive: true });
-  });
+  if (!prefersReducedMotion){
+    let pos = reasonsBox.scrollTop;   // posisi desimal / float position
+    let lastTime = null;              // timestamp frame sebelumnya
+    let isPaused = false;             // lagi di-pause karena interaksi?
+    let isHolding = false;            // lagi nahan di dasar (end pause)?
+    let resumeTimeout = null;
 
-  function autoScrollStep(){
-    if (!isPaused){
-      reasonsBox.scrollTop += scrollSpeed;
-
-      const atBottom = reasonsBox.scrollTop + reasonsBox.clientHeight >= reasonsBox.scrollHeight - 1;
-      if (atBottom && !loopScheduled){
-        loopScheduled = true;
-        setTimeout(() => {
-          reasonsBox.scrollTop = 0;
-          loopScheduled = false;
-        }, 1800);
-      }
+    // Pause saat user interaksi, lanjut lagi setelah dianggurin
+    // // Pause on user interaction, resume after idle
+    function pauseAutoScroll(){
+      isPaused = true;
+      clearTimeout(resumeTimeout);
+      resumeTimeout = setTimeout(() => {
+        pos = reasonsBox.scrollTop;   // sinkron ke posisi terakhir user
+        lastTime = null;
+        isPaused = false;
+      }, RESUME_DELAY_MS);
     }
+
+    ['mouseenter', 'touchstart', 'wheel', 'pointerdown', 'keydown'].forEach(evt => {
+      reasonsBox.addEventListener(evt, pauseAutoScroll, { passive: true });
+    });
+
+    // Kalau user drag scrollbar / scroll manual, ikuti posisinya
+    // // If the user scrolls manually, follow their position
+    reasonsBox.addEventListener('scroll', () => {
+      if (isPaused) pos = reasonsBox.scrollTop;
+    }, { passive: true });
+
+    // Berhenti kalau tab disembunyikan (hemat baterai)
+    // // Stop timing when tab is hidden
+    document.addEventListener('visibilitychange', () => { lastTime = null; });
+
+    function autoScrollStep(now){
+      if (lastTime === null) lastTime = now;
+      const dt = Math.min((now - lastTime) / 1000, 0.1); // detik, dibatasi
+      lastTime = now;
+
+      if (!isPaused && !isHolding){
+        const maxScroll = reasonsBox.scrollHeight - reasonsBox.clientHeight;
+
+        pos += SCROLL_SPEED_PX_PER_SEC * dt;
+        reasonsBox.scrollTop = pos;
+
+        // Sampai dasar: tahan sebentar, lalu balik ke atas
+        // // Reached the bottom: hold, then loop back to the top
+        if (pos >= maxScroll - 1){
+          isHolding = true;
+          setTimeout(() => {
+            pos = 0;
+            reasonsBox.scrollTop = 0;
+            lastTime = null;
+            isHolding = false;
+          }, END_PAUSE_MS);
+        }
+      }
+      requestAnimationFrame(autoScrollStep);
+    }
+
     requestAnimationFrame(autoScrollStep);
   }
-
-  requestAnimationFrame(autoScrollStep);
 }
