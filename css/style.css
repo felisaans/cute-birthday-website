@@ -824,6 +824,44 @@ h1, h2, h3, .heading-font{
 /* -------------------------------------------------------------
    PASTEL BLUE REASONS CONTAINER
 ------------------------------------------------------------- */
+/* wrapper biar GIF dekorasi bisa nempel di pojok kotak /
+   wrapper so the decorative gif can sit at the box corner */
+.reasons-box-wrap{
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+}
+
+/* GIF kecil melayang di pojok kotak / small gif floating at the corner */
+.reasons-corner-gif{
+  position: absolute;
+  top: -40px;
+  left: -32px;
+  width: 64px;
+  height: 64px;
+  z-index: 3;
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+
+.reasons-corner-gif img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* GIF kecil di atas daftar, di dalam kotak / small gif above the list */
+.reasons-gif-top{
+  width: 72px;
+  margin: 0 auto 16px;
+}
+
+.reasons-gif-top img{
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 .reasons-box{
   width: 100%;
   max-width: 560px;
@@ -834,6 +872,7 @@ h1, h2, h3, .heading-font{
   border: 3px solid var(--white);
   max-height: 440px;
   overflow-y: auto;
+  scroll-behavior: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--pastel-blue-deep) transparent;
 }
@@ -879,19 +918,6 @@ h1, h2, h3, .heading-font{
   align-items: center;
   justify-content: center;
   box-shadow: 0 3px 8px rgba(168, 216, 255, 0.5);
-}
-
-/* alasan yang belum "ketiban giliran" ngetik (masih nunggu di-scroll) */
-.reasons-list li.reason-pending{ min-height: 1.6em; }
-
-.reasons-list .reason-cursor{
-  display: inline-block;
-  width: 2px;
-  height: 1em;
-  vertical-align: -0.15em;
-  background: var(--pastel-blue-deep);
-  margin-left: 2px;
-  animation: blink 0.8s step-end infinite;
 }
 
 /* -------------------------------------------------------------
@@ -1061,10 +1087,12 @@ footer{
   .reasons-box{ padding: 22px 18px; max-height: 380px; }
   .reasons-list li{ font-size: 13.5px; padding-left: 34px; }
   .reasons-list li::before{ width: 24px; height: 24px; font-size: 11px; }
+  .reasons-corner-gif{ width: 48px; height: 48px; top: -30px; left: -14px; }
+  .reasons-gif-top{ width: 56px; }
 }
 
 @media (prefers-reduced-motion: reduce){
-  .floaty, .scroll-hint, #letter-text .cursor, .reasons-list .reason-cursor{ animation: none !important; }
+  .floaty, .scroll-hint, #letter-text .cursor{ animation: none !important; }
   html{ scroll-behavior: auto; }
   body{ transition: none; }
 }
