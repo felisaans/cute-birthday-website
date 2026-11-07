@@ -3,18 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday My Girlfriend 💖</title>
+<title>selamat hbd sayangku</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
 
+<!-- CSS & JS dipakai bareng di semua halaman -->
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="blur-in-start">
 
+  <!-- floating hearts/stars, dijalankan oleh js/script.js -->
   <div id="floating-bg"></div>
 
-  <!-- titik navigasi kecil di atas: halaman 1 dari 4 -->
+  <!-- titik navigasi kecil di atas: halaman 1 dari 3 -->
   <nav class="page-nav">
     <a href="index.html" class="active"></a>
     <a href="gallery.html"></a>
@@ -25,30 +27,29 @@
   <!-- ================================================================
        HALAMAN 1 — HERO / INTRO
 
-       Catatan: tombol musik & catatan TIDAK ditaruh manual di sini —
-       keduanya dibuat otomatis lewat js/script.js supaya muncul &
-       nyambung statusnya di semua halaman.
+       Catatan: tombol musik & elemen <audio> TIDAK ditaruh manual
+       di sini lagi — sekarang dibuat otomatis lewat js/script.js
+       (biar musiknya bisa terus lanjut walau pindah ke gallery.html
+       atau letter.html). Kalau mau ganti lagu, edit langsung file
+       assets/music.mp3, bukan di HTML ini.
   ================================================================= -->
   <section id="hero" class="page">
     <div class="hero-content">
 
-      <!-- ⬇⬇⬇ GANTI GIF DI SINI (Hero / Welcome GIF) ⬇⬇⬇
-           Sekarang masih pakai DUMMY: assets/hero.gif
-           Nanti tinggal timpa file assets/hero.gif dengan GIF
-           kamu sendiri (nama file HARUS SAMA: hero.gif). -->
+      <!-- ⬇⬇⬇ GANTI GIF DI SINI (Hero / Welcome GIF) ⬇⬇⬇ -->
       <div class="gif-frame">
         <img src="assets/hero.gif" alt="cute welcome gif">
       </div>
       <!-- ⬆⬆⬆ AKHIR HERO GIF ⬆⬆⬆ -->
 
-      <h1 class="hero-title">happy birthday my <span>girlfriend!!</span> 💖</h1>
-      <p class="hero-subtitle">yess, this is your special day &lt;3</p>
-      
-      <div class="scroll-hint">↓</div>
-      <a href="gallery.html" class="nav-btn">open it &lt;3</a>
-    </div>
-  </section>
+      <h1 class="hero-title">happy birthday my <span>princess!!!</span>💗</h1>
+      <p class="hero-subtitle">i love you sooooo muchhhhh &lt;3</p>
 
-  <script src="js/script.js"></script>
+      <!-- tombol ini pindah ke HALAMAN gallery.html -->
+             <div class="scroll-hint">↓</div>
+    </div>
+      <a href="gallery.html" class="nav-btn">open it &lt;3</a>
+
+  </section>
 </body>
 </html>
