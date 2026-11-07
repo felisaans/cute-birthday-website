@@ -22,6 +22,9 @@ html{ scroll-behavior: smooth; }
 
 /* ============================================================
    PAGE-TO-PAGE TRANSITION (blur + fade)
+   Body mulai blur pas load, lalu perlahan jadi jelas.
+   Pas klik link ke halaman lain, body blur keluar dulu baru
+   pindah halaman. Diatur lewat js/script.js.
 ============================================================ */
 body{
   font-family: 'Poppins', sans-serif;
@@ -90,7 +93,7 @@ h1, h2, h3, .heading-font{
 }
 
 /* ============================================================
-   NAV DOTS — indikator halaman kecil di atas
+   NAV DOTS — indikator halaman kecil (1/2/3) di atas
 ============================================================ */
 .page-nav{
   position: fixed;
@@ -106,7 +109,7 @@ h1, h2, h3, .heading-font{
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--pastel-pink);
+  background: #bcbcbc;
   opacity: 0.5;
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
@@ -121,7 +124,7 @@ h1, h2, h3, .heading-font{
    HERO PAGE (index.html)
 ============================================================ */
 #hero{
-  background: linear-gradient(180deg, var(--pastel-blue) 0%, var(--white) 100%);
+  background: linear-gradient(180deg, var(--white) 0%, var(--white) 100%);
   z-index: 2;
 }
 
@@ -135,8 +138,15 @@ h1, h2, h3, .heading-font{
   gap: 22px;
 }
 
-/* GIF ditampilkan polos, tanpa frame/border/shadow */
+/* -------------------------------------------------------------
+   GIF CONTAINER — TANPA FRAME
+   GIF ditampilkan polos apa adanya (nggak dipotong lingkaran,
+   nggak ada border/shadow). Cuma dibatasi lebar maksimalnya biar
+   tetap rapi & responsive.
+------------------------------------------------------------- */
 .gif-frame{
+  position: static;
+  top: 70px;
   max-width: 220px;
   width: 100%;
   display: flex;
@@ -145,7 +155,8 @@ h1, h2, h3, .heading-font{
 }
 
 .gif-frame img{
-  width: 100%;
+  border-radius: 10px;
+  width: 200%;
   height: auto;
   display: block;
 }
@@ -209,7 +220,7 @@ h1, h2, h3, .heading-font{
 }
 
 /* ============================================================
-   CUTE FLOATING MUSIC BUTTON
+   CUTE FLOATING MUSIC BUTTON (index.html)
 ============================================================ */
 .music-btn{
   position: fixed;
@@ -241,6 +252,7 @@ h1, h2, h3, .heading-font{
   transition: transform 0.3s ease;
 }
 
+/* gentle continuous spin while the song is playing */
 .music-btn.playing .music-icon{
   animation: spinNote 3s linear infinite;
 }
@@ -250,6 +262,7 @@ h1, h2, h3, .heading-font{
   to{ transform: rotate(360deg); }
 }
 
+/* soft pulsing ring around the button while playing */
 .music-btn.playing::after{
   content: '';
   position: absolute;
@@ -265,6 +278,7 @@ h1, h2, h3, .heading-font{
   100% { transform: scale(1.5); opacity: 0; }
 }
 
+/* tiny musical notes that float up from the button while playing */
 .music-note{
   position: absolute;
   top: 0;
@@ -281,7 +295,12 @@ h1, h2, h3, .heading-font{
 }
 
 @media (max-width: 640px){
-  .music-btn{ width: 46px; height: 46px; bottom: 18px; right: 18px; }
+  .music-btn{
+    width: 46px;
+    height: 46px;
+    bottom: 18px;
+    right: 18px;
+  }
   .music-icon{ font-size: 18px; }
 }
 
@@ -315,6 +334,7 @@ h1, h2, h3, .heading-font{
 
 .note-icon{ font-size: 22px; }
 
+/* dark soft backdrop behind the note */
 .note-overlay{
   position: fixed;
   inset: 0;
@@ -335,6 +355,7 @@ h1, h2, h3, .heading-font{
   pointer-events: all;
 }
 
+/* the little sticky note itself */
 .note-paper{
   position: relative;
   width: 100%;
@@ -427,7 +448,12 @@ h1, h2, h3, .heading-font{
 .note-saved.show{ opacity: 1; }
 
 @media (max-width: 640px){
-  .note-btn{ width: 46px; height: 46px; bottom: 18px; left: 18px; }
+  .note-btn{
+    width: 46px;
+    height: 46px;
+    bottom: 18px;
+    left: 18px;
+  }
   .note-icon{ font-size: 18px; }
   .note-paper{ padding: 26px 20px 18px; }
   .note-textarea{ min-height: 180px; }
@@ -437,7 +463,7 @@ h1, h2, h3, .heading-font{
    GALLERY PAGE (gallery.html) — INTERACTIVE SLIDESHOW
 ============================================================ */
 #gallery{
-  background: var(--white);
+  background: linear-gradient(180deg, var(--pastel-blue) 0%, var(--white) 100%);
   z-index: 2;
   gap: 10px;
 }
@@ -467,12 +493,13 @@ h1, h2, h3, .heading-font{
   gap: 20px;
 }
 
+/* small decorative gif in the corner of the slideshow */
 .corner-deco{
   position: absolute;
-  top: -34px;
-  right: -6px;
-  width: 56px;
-  height: 56px;
+  top: -26px;
+  right: -26px;
+  width: 80px;
+  height: 80px;
   z-index: 3;
   transform: rotate(12deg);
   pointer-events: none;
@@ -497,8 +524,8 @@ h1, h2, h3, .heading-font{
 }
 
 .bottom-left-deco img{
-  width: 100%;
-  height: 100%;
+  width: 100px;
+  height: 100px;
   object-fit: contain;
 }
 
@@ -510,6 +537,9 @@ h1, h2, h3, .heading-font{
   width: 100%;
 }
 
+/* -------------------------------------------------------------
+   ARROW BUTTONS — prev / next
+------------------------------------------------------------- */
 .arrow-btn{
   flex-shrink: 0;
   width: 46px;
@@ -537,6 +567,9 @@ h1, h2, h3, .heading-font{
 
 .arrow-btn:active{ transform: scale(0.94); }
 
+/* -------------------------------------------------------------
+   PHOTO STAGE — polaroid-style frame with slow blur transition
+------------------------------------------------------------- */
 .photo-stage{
   position: relative;
   width: 280px;
@@ -572,6 +605,7 @@ h1, h2, h3, .heading-font{
   height: 100%;
   object-fit: cover;
   display: block;
+  /* the slow, sweet blur+fade transition happens here */
   transition: opacity 0.55s ease, filter 0.55s ease, transform 0.55s ease;
   opacity: 1;
   filter: blur(0);
@@ -584,6 +618,7 @@ h1, h2, h3, .heading-font{
   transform: scale(1.06);
 }
 
+/* little floating hearts that pop when the photo is tapped */
 .mini-heart{
   position: absolute;
   font-size: 18px;
@@ -598,6 +633,9 @@ h1, h2, h3, .heading-font{
   100% { transform: translateY(-70px) scale(1.1); opacity: 0; }
 }
 
+/* -------------------------------------------------------------
+   CAPTION — fades along with the photo
+------------------------------------------------------------- */
 .caption{
   font-size: 15px;
   color: var(--text-dark);
@@ -616,6 +654,9 @@ h1, h2, h3, .heading-font{
   filter: blur(6px);
 }
 
+/* -------------------------------------------------------------
+   PROGRESS DOTS + COUNTER
+------------------------------------------------------------- */
 .dots{
   display: flex;
   gap: 10px;
@@ -670,7 +711,7 @@ h1, h2, h3, .heading-font{
   margin-bottom: 4px;
 }
 
-.reasons-heading .heart{ color: var(--pastel-blue-deep); }
+.reasons-heading .heart{ color: var(--pastel-pink-deep); }
 
 .reasons-sub{
   color: var(--text-soft);
@@ -678,6 +719,9 @@ h1, h2, h3, .heading-font{
   font-size: 14.5px;
 }
 
+/* -------------------------------------------------------------
+   CLOTHESLINE / HANGING POLAROIDS
+------------------------------------------------------------- */
 .clothesline-wrap{
   position: relative;
   width: 100%;
@@ -723,6 +767,7 @@ h1, h2, h3, .heading-font{
   transform: rotate(0deg) translateY(-4px);
 }
 
+/* the little clothespin clipping the photo to the rope */
 .clip{
   position: absolute;
   top: -12px;
@@ -776,33 +821,12 @@ h1, h2, h3, .heading-font{
 .frame-blue{ border: 3px solid var(--pastel-blue); }
 .frame-lavender{ border: 3px solid var(--pastel-lavender); }
 
-/* wrapper so we can position a decorative gif at its corner */
-.reasons-box-wrap{
-  position: relative;
-  width: 100%;
-  max-width: 560px;
-}
-
-/* small cute gif floating at the corner of the reasons box */
-.reasons-corner-gif{
-  position: absolute;
-  top: -30px;
-  left: -20px;
-  width: 64px;
-  height: 64px;
-  z-index: 3;
-  transform: rotate(-8deg);
-  pointer-events: none;
-}
-
-.reasons-corner-gif img{
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
+/* -------------------------------------------------------------
+   PASTEL BLUE REASONS CONTAINER
+------------------------------------------------------------- */
 .reasons-box{
   width: 100%;
+  max-width: 560px;
   background: linear-gradient(180deg, var(--pastel-blue) 0%, #eaf5ff 100%);
   border-radius: 26px;
   padding: 30px 28px;
@@ -810,25 +834,14 @@ h1, h2, h3, .heading-font{
   border: 3px solid var(--white);
   max-height: 440px;
   overflow-y: auto;
-  scroll-behavior: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--pastel-blue-deep) transparent;
 }
 
 .reasons-box::-webkit-scrollbar{ width: 6px; }
 .reasons-box::-webkit-scrollbar-thumb{
   background: var(--pastel-blue-deep);
   border-radius: 10px;
-}
-
-/* small cute gif sitting above the list, inside the box */
-.reasons-gif-top{
-  width: 72px;
-  margin: 0 auto 16px;
-}
-
-.reasons-gif-top img{
-  width: 100%;
-  height: auto;
-  display: block;
 }
 
 .reasons-list{
@@ -868,6 +881,22 @@ h1, h2, h3, .heading-font{
   box-shadow: 0 3px 8px rgba(168, 216, 255, 0.5);
 }
 
+/* alasan yang belum "ketiban giliran" ngetik (masih nunggu di-scroll) */
+.reasons-list li.reason-pending{ min-height: 1.6em; }
+
+.reasons-list .reason-cursor{
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  vertical-align: -0.15em;
+  background: var(--pastel-blue-deep);
+  margin-left: 2px;
+  animation: blink 0.8s step-end infinite;
+}
+
+/* -------------------------------------------------------------
+   LIGHTBOX — enlarged photo view
+------------------------------------------------------------- */
 .lightbox-overlay{
   position: fixed;
   inset: 0;
@@ -922,14 +951,14 @@ h1, h2, h3, .heading-font{
    LETTER PAGE (letter.html)
 ============================================================ */
 #letter-page{
-  background: linear-gradient(180deg, var(--white) 0%, var(--pastel-lavender) 100%);
-  z-index: 2;
+  background: linear-gradient(180deg, var(--white) 0%, var(--pastel-pink) 100%);
+  z-index: 0;
 }
 
 .letter-card{
   max-width: 640px;
   width: 100%;
-  background: var(--white);
+  background:var(--white);
   border-radius: 32px;
   padding: 44px 32px;
   box-shadow: var(--shadow-soft);
@@ -941,6 +970,7 @@ h1, h2, h3, .heading-font{
 }
 
 .letter-title{
+  font-family: 'Quicksand', sans-serif;
   font-size: clamp(24px, 5vw, 34px);
   font-weight: 800;
   color: var(--pastel-pink-deep);
@@ -1006,10 +1036,10 @@ h1, h2, h3, .heading-font{
 
 footer{
   text-align: center;
-  padding: 30px 10px 50px;
+  padding: 30px 10px 30px;
   color: var(--text-soft);
   font-size: 13px;
-  z-index: 2;
+  z-index: 1;
   position: relative;
 }
 
@@ -1024,19 +1054,17 @@ footer{
   .page-nav{ top: 14px; }
   .photo-stage{ width: 220px; height: 220px; }
   .arrow-btn{ width: 40px; height: 40px; font-size: 20px; }
-  .corner-deco{ width: 46px; height: 46px; top: -26px; right: 0; }
-  .bottom-left-deco{ width: 56px; height: 56px; bottom: -18px; left: -18px; }
+  .corner-deco{ width: 68px; height: 68px; top: -22px; right: -22px; }
+  .bottom-left-deco{ width: 90px; height: 90px; bottom: -10px; left: -45px; }
   .mini-photo-frame{ width: 78px; height: 78px; }
   .hanging-photos{ gap: 10px; }
   .reasons-box{ padding: 22px 18px; max-height: 380px; }
   .reasons-list li{ font-size: 13.5px; padding-left: 34px; }
   .reasons-list li::before{ width: 24px; height: 24px; font-size: 11px; }
-  .reasons-corner-gif{ width: 48px; height: 48px; top: -22px; left: -10px; }
-  .reasons-gif-top{ width: 56px; }
 }
 
 @media (prefers-reduced-motion: reduce){
-  .floaty, .scroll-hint, #letter-text .cursor{ animation: none !important; }
+  .floaty, .scroll-hint, #letter-text .cursor, .reasons-list .reason-cursor{ animation: none !important; }
   html{ scroll-behavior: auto; }
   body{ transition: none; }
 }
